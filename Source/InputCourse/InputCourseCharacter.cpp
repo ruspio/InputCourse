@@ -92,11 +92,14 @@ void AInputCourseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		// Testing
 		EnhancedInputComponent->BindAction(TestAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::TestFunc);
 
-		// Testing
+		// Walk
 		EnhancedInputComponent->BindAction(WalkAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::Walk);
 
-		// Testing
+		// Sprint
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::Sprint);
+
+		// Rotate
+		EnhancedInputComponent->BindAction(RotateAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::Rotate);
 	}
 	else
 	{
@@ -178,4 +181,17 @@ void AInputCourseCharacter::Sprint(const FInputActionValue& Value)
 	} else {
 		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
 	}	
+}
+
+void AInputCourseCharacter::Rotate(const FInputActionValue& Value)
+{
+	float DirectionOfRotation = Value.Get<float>();
+
+	if (GetCharacterMovement()->IsMovingOnGround() && DirectionOfRotation != 0)
+	{
+		float DeltaTime = GetWorld()->GetDeltaSeconds();
+		FRotator ActualRotation = GetActorRotation();
+		ActualRotation.Yaw += (RotateSpeed * DirectionOfRotation * DeltaTime);
+		SetActorRotation(ActualRotation);
+	}
 }
