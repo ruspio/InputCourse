@@ -68,8 +68,7 @@ void AInputCourseCharacter::NotifyControllerChanged()
 		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
 		if (Subsystem)
 		{
-			// Commenting out for Blueprint version
-			//	Subsystem->AddMappingContext(DefaultMappingContext, 0);
+			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
 }
@@ -77,7 +76,8 @@ void AInputCourseCharacter::NotifyControllerChanged()
 void AInputCourseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	// Set up action bindings
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (EnhancedInputComponent) {
 		
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
@@ -88,6 +88,9 @@ void AInputCourseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::Look);
+
+		// Testing
+		EnhancedInputComponent->BindAction(TestAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::TestFunc);
 	}
 	else
 	{
@@ -128,5 +131,15 @@ void AInputCourseCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AInputCourseCharacter::TestFunc(const FInputActionValue& Value)
+{
+	bool TestValue = Value.Get<bool>();
+	
+	if (Controller != nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, TEXT("Test!"), true);
 	}
 }
