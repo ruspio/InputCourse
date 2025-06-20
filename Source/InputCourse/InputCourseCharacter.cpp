@@ -91,6 +91,12 @@ void AInputCourseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Testing
 		EnhancedInputComponent->BindAction(TestAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::TestFunc);
+
+		// Testing
+		EnhancedInputComponent->BindAction(WalkAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::Walk);
+
+		// Testing
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AInputCourseCharacter::Sprint);
 	}
 	else
 	{
@@ -137,9 +143,39 @@ void AInputCourseCharacter::Look(const FInputActionValue& Value)
 void AInputCourseCharacter::TestFunc(const FInputActionValue& Value)
 {
 	bool TestValue = Value.Get<bool>();
-	
+
 	if (Controller != nullptr)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, TEXT("Test!"), true);
 	}
+}
+
+void AInputCourseCharacter::Walk(const FInputActionValue& Value)
+{
+	bool ShouldWalk = Value.Get<bool>();
+
+	if (ShouldWalk)
+	{
+		if (GetCharacterMovement()->IsMovingOnGround())
+		{
+			GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+		}		
+	} else {
+		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
+	}	
+}
+
+void AInputCourseCharacter::Sprint(const FInputActionValue& Value)
+{
+	bool ShouldSprint = Value.Get<bool>();
+
+	if (ShouldSprint)
+	{
+		if (GetCharacterMovement()->IsMovingOnGround())
+		{
+			GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+		}		
+	} else {
+		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
+	}	
 }

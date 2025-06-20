@@ -47,6 +47,23 @@ class AInputCourseCharacter : public ACharacter
 	/** Test Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* TestAction;
+	
+	/** Test Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* WalkAction;
+	
+	/** Test Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float NormalSpeed = 500.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float WalkSpeed = 200.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	float SprintSpeed = 750.f;
 
 public:
 	AInputCourseCharacter();
@@ -62,6 +79,12 @@ protected:
 
 	/** Called for test input */
 	void TestFunc(const FInputActionValue& Value);
+
+	/** Called for test input */
+	void Walk(const FInputActionValue& Value);
+
+	/** Called for test input */
+	void Sprint(const FInputActionValue& Value);
 			
 
 protected:
